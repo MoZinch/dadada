@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Юлечка 🎀</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background: radial-gradient(ellipse at top, #2a1520 0%, #14080d 60%, #0a0408 100%);
+    color: #c9a8b0;
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'><path fill='%23e8b4b8' stroke='%2314080d' stroke-width='1' d='M12 21s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z'/></svg>") 14 14, auto;
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+.black-fade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 30%, rgba(10,4,8,0.9) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+.all-content {
+    position: relative;
+    z-index: 10;
+}
+section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: 1.4s ease;
+}
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: white;
+    font-style: italic;
+    margin-bottom: 25px;
+    text-shadow: 0 0 50px rgba(232,180,184,0.4);
+}
+h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    color: white;
+    margin-bottom: 35px;
+    text-shadow: 0 0 40px rgba(232,180,184,0.3);
+}
+p {
+    font-size: 24px;
+    line-height: 1.8;
+    max-width: 680px;
+    font-weight: 300;
+}
+.arrow-down {
+    width: 24px;
+    height: 24px;
+    border-left: 1px solid #e8b4b8;
+    border-top: 1px solid #e8b4b8;
+    transform: rotate(45deg);
+    margin-top: 50px;
+    animation: moveArrow 2s infinite;
+    opacity: 0.6;
+}
+@keyframes moveArrow {
+    0% { transform: translateY(0) rotate(45deg); opacity: 0.3; }
+    50% { transform: translateY(10px) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(0) rotate(45deg); opacity: 0.3; }
+}
+.cards-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 620px;
+    width: 100%;
+    margin-top: 20px;
+}
+.card {
+    background: rgba(20,8,13,0.8);
+    border: 1px solid rgba(232,180,184,0.25);
+    border-radius: 20px;
+    padding: 28px 32px;
+    text-align: left;
+    transition: 0.5s;
+    position: relative;
+    backdrop-filter: blur(8px);
+}
+.card:hover {
+    border-color: #e8b4b8;
+    transform: translateY(-4px);
+    box-shadow: 0 0 40px rgba(232,180,184,0.25);
+}
+.card::after {
+    content: '♥';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #e8b4b8;
+    font-size: 18px;
+    opacity: 0.4;
+}
+.card-num {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #e8b4b8;
+    margin-bottom: 12px;
+}
+.card-text {
+    font-size: 22px;
+    color: #f5e8ea;
+}
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+}
+.photo-box {
+    aspect-ratio: 1;
+    border-radius: 18px;
+    border: 1px solid rgba(232,180,184,0.25);
+    overflow: hidden;
+    transition: 0.4s;
+}
+.photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85);
+    transition: 0.5s;
+}
+.photo-box:hover img {
+    transform: scale(1.1);
+    filter: brightness(1);
+}
+.plans-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 620px;
+    width: 100%;
+    margin-top: 20px;
+}
+.plan-box {
+    background: rgba(20,8,13,0.7);
+    border: 1px solid rgba(232,180,184,0.2);
+    border-radius: 18px;
+    padding: 22px 28px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: #f5e8ea;
+    transition: 0.4s;
+}
+.plan-box:hover {
+    border-color: #e8b4b8;
+    transform: scale(1.02);
+}
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+}
+.note-card {
+    height: 170px;
+    background: #1f0f15;
+    border-radius: 18px;
+    border: 1px solid rgba(232,180,184,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    text-align: center;
+    user-select: none;
+    transition: 0.4s;
+    cursor: pointer;
+}
+.note-card.flipped {
+    background: #2a1520;
+    border-color: #e8b4b8;
+}
+.note-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: #e8b4b8;
+    line-height: 1.35;
+    transition: 0.3s;
+}
+.note-card.flipped .note-text {
+    color: #f5e8ea;
+    font-size: 15px;
+}
+.game-area {
+    width: 100%;
+    max-width: 500px;
+    height: 360px;
+    border: 1px solid rgba(232,180,184,0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(20,8,13,0.55);
+    margin-top: 20px;
+    position: relative;
+}
+.falling-heart {
+    position: absolute;
+    font-size: 32px;
+    color: #e8b4b8;
+    animation: fallAnim 2.5s ease-out forwards;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+@keyframes fallAnim {
+    0% { opacity: 0; transform: translate(-50%,-50%) scale(0.3); }
+    10% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    85% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%,-50%) scale(0.3); }
+}
+.game-info-bar {
+    display: flex;
+    gap: 40px;
+    margin-top: 18px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: #e8b4b8;
+}
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #e8b4b8;
+}
+.action-btn {
+    margin-top: 22px;
+    background: transparent;
+    color: #e8b4b8;
+    border: 1px solid #e8b4b8;
+    padding: 12px 40px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.action-btn:hover {
+    background: #e8b4b8;
+    color: #14080d;
+}
+.love-counter, .meet-counter {
+    display: flex;
+    gap: 30px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.counter-item, .meet-item {
+    text-align: center;
+    padding: 20px 10px;
+}
+.counter-val, .meet-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    color: #e8b4b8;
+    font-style: italic;
+    line-height: 1;
+}
+.meet-val {
+    font-size: 56px;
+}
+.counter-txt, .meet-txt {
+    font-size: 14px;
+    color: #d4a5a5;
+    text-transform: uppercase;
+    margin-top: 12px;
+}
+.main-heart {
+    font-size: 112px;
+    color: #e8b4b8;
+    animation: heartBeat 3s infinite;
+    cursor: pointer;
+    user-select: none;
+}
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+.main-heart.aktivno {
+    animation: heartBoom 0.8s;
+}
+@keyframes heartBoom {
+    50% { transform: scale(1.6); }
+}
+.secret-msg {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 27px;
+    color: #f5e8ea;
+    margin-top: 35px;
+    opacity: 0;
+    transition: 1.2s;
+    max-width: 560px;
+}
+.secret-msg.pokazat {
+    opacity: 1;
+}
+
+/* НОВЫЙ ПЛЕЕР */
+.music-player {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(20, 8, 13, 0.65);
+    padding: 8px 16px 8px 8px;
+    border-radius: 40px;
+    border: 1px solid rgba(232, 180, 184, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+}
+
+.music-player:hover {
+    border-color: rgba(232, 180, 184, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(232, 180, 184, 0.15);
+}
+
+.play-btn {
+    background: linear-gradient(135deg, #e8b4b8, #d4a5a5);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 2px 10px rgba(232, 180, 184, 0.4);
+    flex-shrink: 0;
+    outline: none;
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 15px rgba(232, 180, 184, 0.7);
+}
+
+.play-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #14080d;
+    margin-left: 2px; /* чуть сдвигаем треугольник для визуального центра */
+}
+
+#pause-icon {
+    margin-left: 0; /* паузе сдвиг не нужен */
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 70px;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(232, 180, 184, 0.2);
+    border-radius: 2px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: #e8b4b8;
+    margin-top: -4px;
+    transition: 0.2s;
+    box-shadow: 0 0 8px rgba(232, 180, 184, 0.5);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: #fff;
+}
+
+.volume-slider::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(232, 180, 184, 0.2);
+    border-radius: 2px;
+}
+
+.volume-slider::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    border: none;
+    border-radius: 50%;
+    background: #e8b4b8;
+    box-shadow: 0 0 8px rgba(232, 180, 184, 0.5);
+}
+
+.last-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 35px;
+    color: #f5e8ea;
+    max-width: 700px;
+}
+.sign {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 19px;
+    margin-top: 30px;
+    color: #d4a5a5;
+}
+.final-photo {
+    margin-top: 25px;
+    max-width: 280px;
+    width: 90%;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(232,180,184,0.3);
+    box-shadow: 0 0 40px rgba(232,180,184,0.15);
+    transition: 0.4s;
+}
+.final-photo:hover {
+    transform: scale(1.03);
+    border-color: #e8b4b8;
+}
+.final-photo img {
+    width: 100%;
+    display: block;
+}
+.click-heart {
+    position: fixed;
+    font-size: 24px;
+    color: #e8b4b8;
+    z-index: 100;
+    animation: flyUp 1.5s forwards;
+    pointer-events: none;
+}
+@keyframes flyUp {
+    0% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -120px); }
+}
+.salute-heart {
+    position: fixed;
+    font-size: 32px;
+    color: #e8b4b8;
+    z-index: 999;
+    pointer-events: none;
+    animation: goUp 3s forwards;
+}
+@keyframes goUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-110vh); opacity: 0; }
+}
+@media (max-width: 600px) {
+    h1 { font-size: 56px; }
+    h2 { font-size: 35px; }
+    p { font-size: 20px; }
+    .counter-val { font-size: 51px; }
+    .meet-val { font-size: 38px; }
+    .main-heart { font-size: 80px; }
+    .last-text { font-size: 25px; }
+    .note-card { height: 150px; }
+    .game-area { height: 300px; }
+    .counter-item { min-width: 70px; padding: 10px 5px; }
+    .love-counter { gap: 10px; }
+    .music-player { bottom: 15px; right: 15px; padding: 6px 12px 6px 6px; }
+    .play-btn { width: 36px; height: 36px; }
+    .play-btn svg { width: 16px; height: 16px; }
+    .volume-slider { width: 50px; }
+}
+</style>
+</head>
+<body>
+
+<div class="black-fade"></div>
+<div id="canvas-container"></div>
+
+<!-- Новый плеер -->
+<div class="music-player">
+    <button id="music-btn" class="play-btn">
+        <!-- Иконка Play (треугольник) -->
+        <svg id="play-icon" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <!-- Иконка Pause (две палки) -->
+        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </button>
+    <input type="range" id="vol-slider" class="volume-slider" min="0" max="1" step="0.01" value="0.3">
+</div>
+
+<audio id="muz" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="all-content">
+
+    <section>
+        <h1>Юлечка</h1>
+        <p>Это просто так. Без повода, без дат, без «надо». Просто потому что ты есть — и это уже причина сделать тебе приятно.</p>
+        <div class="arrow-down"></div>
+    </section>
+
+    <section>
+        <h2>Пара мелочей</h2>
+        <p style="margin-bottom: 20px; font-style: italic;">Которые я в тебе очень люблю.</p>
+        <div class="cards-list">
+            <div class="card">
+                <div class="card-num">I</div>
+                <div class="card-text">То, как ты мяукаешь, ожидая моего ответа.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">II</div>
+                <div class="card-text">То, как ты обижаешься, если сказать что-то не то.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">III</div>
+                <div class="card-text">То, как ты ведешь себя, когда тебе что-то не нравится.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">IV</div>
+                <div class="card-text">То, когда ты злишься.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">V</div>
+                <div class="card-text">То, как ты евреешь.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">VI</div>
+                <div class="card-text">То, как ты споришь.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">VII</div>
+                <div class="card-text">То, как ты мяукаешь не зная как выразить свои чувства.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">VIII</div>
+                <div class="card-text">То, как ты переживаешь за меня, даже когда не надо.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">IX</div>
+                <div class="card-text">То, как ты скучаешь и не боишься это сказать.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">X</div>
+                <div class="card-text">То, как мы засыпаем вместе в войсе.</div>
+            </div>
+            <div class="card">
+                <div class="card-num">XI</div>
+                <div class="card-text">Я люблю в тебе все, душа моя.</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Наши моменты</h2>
+        <p style="margin-bottom: 20px; font-style: italic;">То, что мы уже пережили.</p>
+        <div class="photo-grid">
+            <div class="photo-box"><img src="https://i.ibb.co/jkzFW1dm/photo-2026-10-26-01-30-08.jpg" alt="1"></div>
+            <div class="photo-box"><img src="https://i.ibb.co/bM2QDXKq/photo-2026-10-22-20-22-39.jpg" alt="2"></div>
+            <div class="photo-box"><img src="https://i.ibb.co/tM3TnNcK/photo-2026-09-26-05-47-44.jpg" alt="3"></div>
+            <div class="photo-box"><img src="https://i.ibb.co/yvMtQd2/photo-2026-10-29-03-42-04.jpg" alt="4"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Наши планы</h2>
+        <p style="margin-bottom: 20px; font-style: italic;">Что мы сделаем, когда встретимся.</p>
+        <div class="plans-list">
+            <div class="plan-box">Поспать вместе</div>
+            <div class="plan-box">Приготовить что нибудь вместе</div>
+            <div class="plan-box">Погулять под дождем</div>
+            <div class="plan-box">Посмотреть фильмы в обнимку</div>
+            <div class="plan-box">Поиграть в игры рядом</div>
+            <div class="plan-box">Позавтракать вместе утро</div>
+            <div class="plan-box">Сходить в туалет за ручку</div>
+            <div class="plan-box">Жить вместе</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Записки</h2>
+        <p style="margin-bottom: 20px; font-style: italic;">Нажми на любую.</p>
+        <div class="notes-grid">
+            <div class="note-card" data-f="Открой меня" data-b="Ты делаешь меня счастливее, чем я могу показать словами.">
+                <div class="note-text">Открой меня</div>
+            </div>
+            <div class="note-card" data-f="И меня" data-b="С тобой даже самые обычные дни становятся особенными.">
+                <div class="note-text">И меня</div>
+            </div>
+            <div class="note-card" data-f="И вот эту" data-b="Я хочу просыпаться и видеть тебя рядом. Каждое утро.">
+                <div class="note-text">И вот эту</div>
+            </div>
+            <div class="note-card" data-f="И последнюю" data-b="Ты — мое самое любимое место на земле.">
+                <div class="note-text">И последнюю</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Поймай сердечко</h2>
+        <p style="margin-bottom: 5px; font-style: italic;">Кликай по сердечкам. У тебя 15 секунд.</p>
+        <div class="game-area" id="game-area"></div>
+        <div class="game-info-bar">
+            <div>Счет: <span id="game-score">0</span></div>
+            <div>Время: <span id="game-time">15</span></div>
+        </div>
+        <button class="action-btn" onclick="startGame()">Играть</button>
+    </section>
+
+    <section>
+        <h2>Мы вместе</h2>
+        <p style="margin-bottom: 10px; font-style: italic;">И это только начало.</p>
+        <div class="love-counter">
+            <div class="counter-item">
+                <div class="counter-val" id="days">0</div>
+                <div class="counter-txt">дней</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-val" id="hours">0</div>
+                <div class="counter-txt">часов</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-val" id="mins">0</div>
+                <div class="counter-txt">минут</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-val" id="secs">0</div>
+                <div class="counter-txt">секунд</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>До встречи</h2>
+        <p style="margin-bottom: 20px; font-style: italic;">Осталось совсем немного.</p>
+        <div class="meet-counter">
+            <div class="meet-item">
+                <div class="meet-val" id="m-days">0</div>
+                <div class="meet-txt">дней</div>
+            </div>
+            <div class="meet-item">
+                <div class="meet-val" id="m-hours">0</div>
+                <div class="meet-txt">часов</div>
+            </div>
+            <div class="meet-item">
+                <div class="meet-val" id="m-mins">0</div>
+                <div class="meet-txt">минут</div>
+            </div>
+            <div class="meet-item">
+                <div class="meet-val" id="m-secs">0</div>
+                <div class="meet-txt">секунд</div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Нажми</h2>
+        <div class="main-heart" id="main-heart" onclick="openSecret()">♥</div>
+        <div class="secret-msg" id="secret-msg">
+            Я знаю, что тебе сейчас тяжело. И я хочу, чтобы ты знала: я рядом. Даже когда далеко. Особенно когда далеко.
+        </div>
+        <button class="action-btn" onclick="salute()">Салют 🎆</button>
+    </section>
+
+    <section>
+        <p class="last-text">
+            Это не признание, Юлечка. Это просто <em>я думаю о тебе</em>. И буду думать завтра, послезавтра и через полгода. Я думаю и буду думать только о тебе. Ты идеальна и превосходна. Не забывай.
+        </p>
+        <div class="arrow-down" style="margin-top: 60px;"></div>
+        <div class="sign">ета мы</div>
+        <div class="final-photo">
+            <img src="https://i.ibb.co/tnw702V/photo-2026-10-28-05-40-15.jpg" alt="мы">
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var muz = document.getElementById('muz');
+var mb = document.getElementById('music-btn');
+var playIcon = document.getElementById('play-icon');
+var pauseIcon = document.getElementById('pause-icon');
+var vol = document.getElementById('vol-slider');
+var p = false;
+var test = 0;
+
+muz.volume = 0.3;
+
+mb.onclick = function() {
+    if (p == true) {
+        muz.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        p = false;
+    } else {
+        muz.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        p = true;
+    }
+};
+
+vol.oninput = function() {
+    muz.volume = this.value;
+}
+
+window.onscroll = function() {
+    var sc = window.pageYOffset || document.documentElement.scrollTop;
+    var allSecs = document.getElementsByTagName('section');
+    
+    for (var i = 0; i < allSecs.length; i++) {
+        var t = allSecs[i].offsetTop;
+        if (sc > t - 400) {
+            allSecs[i].classList.add('visible');
+        }
+    }
+};
+setTimeout(function(){
+    window.dispatchEvent(new Event('scroll'));
+}, 100);
+
+var cards = document.getElementsByClassName('note-card');
+for (var i = 0; i < cards.length; i++) {
+    cards[i].onclick = function() {
+        var txt = this.getElementsByClassName('note-text')[0];
+        var f = this.getAttribute('data-f');
+        var bk = this.getAttribute('data-b');
+        
+        txt.style.opacity = '0';
+        var temp = this; 
+        
+        setTimeout(function() {
+            if (temp.classList.contains('flipped')) {
+                temp.classList.remove('flipped');
+                txt.innerHTML = f;
+            } else {
+                temp.classList.add('flipped');
+                txt.innerHTML = bk;
+            }
+            txt.style.opacity = '1';
+        }, 200);
+    }
+}
+
+var d1 = new Date('2026-10-10T00:00:00');
+function calcLove() {
+    var now = new Date();
+    var diff = now.getTime() - d1.getTime();
+    if (diff < 0) diff = 0;
+    
+    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    var m = Math.floor((diff / (1000 * 60)) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+    
+    document.getElementById('days').innerHTML = d;
+    document.getElementById('hours').innerHTML = h;
+    document.getElementById('mins').innerHTML = m;
+    document.getElementById('secs').innerHTML = s;
+}
+calcLove();
+setInterval(calcLove, 1000);
+
+var d2 = new Date('2026-12-09T00:00:00');
+function calcMeet() {
+    var now = new Date();
+    var diff = d2.getTime() - now.getTime();
+    if (diff < 0) diff = 0;
+    
+    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    var m = Math.floor((diff / (1000 * 60)) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+    
+    document.getElementById('m-days').innerHTML = d;
+    document.getElementById('m-hours').innerHTML = h;
+    document.getElementById('m-mins').innerHTML = m;
+    document.getElementById('m-secs').innerHTML = s;
+}
+calcMeet();
+setInterval(calcMeet, 1000);
+
+function openSecret() {
+    var h = document.getElementById('main-heart');
+    h.classList.remove('aktivno');
+    var x = h.offsetWidth; 
+    h.classList.add('aktivno');
+    document.getElementById('secret-msg').classList.add('pokazat');
+}
+
+document.onclick = function(e) {
+    var h = document.createElement('div');
+    h.className = 'click-heart';
+    h.innerHTML = '♥';
+    if (e.target.className == 'falling-heart') return;
+    
+    h.style.left = e.clientX + 'px';
+    h.style.top = e.clientY + 'px';
+    document.body.appendChild(h);
+    
+    setTimeout(function() {
+        h.remove();
+    }, 1500);
+};
+
+var active = false;
+var score = 0;
+var time = 15;
+var t1;
+var t2;
+
+function startGame() {
+    if (active == true) return;
+    
+    active = true;
+    score = 0;
+    time = 15;
+    
+    document.getElementById('game-score').innerHTML = 0;
+    document.getElementById('game-time').innerHTML = 15;
+    
+    var a = document.getElementById('game-area');
+    a.innerHTML = '';
+
+    t1 = setInterval(function() {
+        time = time - 1;
+        document.getElementById('game-time').innerHTML = time;
+        if (time <= 0) {
+            stopGame();
+        }
+    }, 1000);
+
+    spawn();
+}
+
+function spawn() {
+    if (active == false) return;
+    
+    var a = document.getElementById('game-area');
+    var h = document.createElement('div');
+    h.className = 'falling-heart';
+    h.innerHTML = '♥';
+    
+    h.style.left = (15 + Math.random() * 70) + '%';
+    h.style.top = (15 + Math.random() * 70) + '%';
+    
+    h.onclick = function(event) {
+        event.stopPropagation();
+        if (active == false) return;
+        score = score + 1;
+        document.getElementById('game-score').innerHTML = score;
+        h.remove();
+    };
+    
+    a.appendChild(h);
+    
+    setTimeout(function() {
+        if (h.parentNode) {
+            h.remove();
+        }
+    }, 2500);
+    
+    t2 = setTimeout(spawn, 600);
+}
+
+function stopGame() {
+    active = false;
+    clearInterval(t1);
+    clearTimeout(t2);
+    var a = document.getElementById('game-area');
+    a.innerHTML = '<div class="game-over">Твой счет: ' + score + ' ❤</div>';
+}
+
+function salute() {
+    for (var i = 0; i < 30; i++) {
+        (function(idx) {
+            setTimeout(function() {
+                var h = document.createElement('div');
+                h.className = 'salute-heart';
+                h.innerHTML = '♥';
+                h.style.left = (5 + Math.random() * 90) + '%';
+                h.style.bottom = '-50px';
+                h.style.fontSize = (1.4 + Math.random() * 1.6) + 'rem';
+                h.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+                document.body.appendChild(h);
+                setTimeout(function() {
+                    h.remove();
+                }, 5000);
+            }, idx * 80);
+        })(i);
+    }
+}
+
+var scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x14080d, 0.0015);
+var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+camera.position.z = 500;
+var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x000000, 0);
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+var light = new THREE.PointLight(0xe8b4b8, 1.2, 1500);
+light.position.set(0, 0, 500);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+
+function tex() {
+    var c = document.createElement('canvas');
+    c.width = 128;
+    c.height = 128;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = 'rgba(232,180,184,1)';
+    ctx.beginPath();
+    var x = 64, y = 70, r = 20;
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x, y - r, x - r*2, y - r, x - r*2, y - r/2);
+    ctx.bezierCurveTo(x - r*2, y + r/2, x, y + r*1.5, x, y + r*2);
+    ctx.bezierCurveTo(x, y + r*1.5, x + r*2, y + r/2, x + r*2, y - r/2);
+    ctx.bezierCurveTo(x + r*2, y - r, x, y - r, x, y);
+    ctx.fill();
+    return new THREE.CanvasTexture(c);
+}
+
+var count = 400;
+var geo = new THREE.BufferGeometry();
+var pos = new Float32Array(count * 3);
+var sp = new Float32Array(count);
+for (var i = 0; i < count; i++) {
+    pos[i*3] = (Math.random() - 0.5) * 2000;
+    pos[i*3+1] = (Math.random() - 0.5) * 2000;
+    pos[i*3+2] = (Math.random() - 0.5) * 1000;
+    sp[i] = 0.2 + Math.random() * 0.6;
+}
+geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+var mat = new THREE.PointsMaterial({
+    size: 30,
+    map: tex(),
+    transparent: true,
+    opacity: 0.7,
+    color: 0xe8b4b8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    sizeAttenuation: true
+});
+
+var points = new THREE.Points(geo, mat);
+scene.add(points);
+
+var mx = 0;
+var my = 0;
+document.addEventListener('mousemove', function(e) {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+var tm = 0;
+function loop() {
+    requestAnimationFrame(loop);
+    tm = tm + 0.005;
+    var posArray = geo.attributes.position.array;
+    for (var i = 0; i < count; i++) {
+        posArray[i*3+1] -= sp[i];
+        if (posArray[i*3+1] < -1000) {
+            posArray[i*3+1] = 1000;
+            posArray[i*3] = (Math.random() - 0.5) * 2000;
+        }
+    }
+    geo.attributes.position.needsUpdate = true;
+    points.rotation.y = tm * 0.1;
+    var tx = Math.sin(tm * 0.5) * 20 + mx * 40;
+    var ty = Math.cos(tm * 0.4) * 15 - my * 40;
+    camera.position.x += (tx - camera.position.x) * 0.05;
+    camera.position.y += (ty - camera.position.y) * 0.05;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+}
+loop();
+
+window.onresize = function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+};
+</script>
+</body>
+</html>
